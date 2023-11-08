@@ -1,0 +1,68 @@
+Q1. Which track is featured on the most playlists?
+
+SELECT 
+  Track.Name, 
+  COUNT(PlaylistTrack.PlaylistId) AS total_playlist
+FROM 
+  Track 
+  JOIN PlaylistTrack ON Track.TrackId = PlaylistTrack.TrackId 
+GROUP BY 
+  1 
+ORDER BY 
+  2 DESC 
+LIMIT 
+  3;
+
+
+Q2. Which album has the longest play-time?
+
+ SELECT 
+  Album.Title, 
+  SUM(Track.Milliseconds) AS total_playtime
+FROM 
+  Album 
+  JOIN Track ON Album.AlbumId = Track.AlbumId 
+GROUP BY 
+  1 
+ORDER BY 
+  2 DESC 
+LIMIT 
+  3;
+
+Q3. Which customer spent the most in 2010?
+
+SELECT 
+  Customer.FirstName || " " || Customer.LastName AS customer_name, 
+  SUM(Invoice.Total) AS total_spend 
+FROM 
+  Customer 
+  JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId 
+WHERE 
+  strftime("%Y", InvoiceDate) = '2010' 
+GROUP BY 
+  1 
+ORDER BY 
+  2 DESC 
+LIMIT 
+  3;
+
+Q4. List the top 5 best selling artists.
+
+
+SELECT 
+  Artist.Name, 
+  ROUND(
+    SUM(InvoiceLine.UnitPrice), 
+    0
+  ) As total_sales 
+FROM 
+  Artist 
+  JOIN Album ON Artist.ArtistId = Album.ArtistId 
+  JOIN Track ON Album.AlbumId = Track.AlbumId 
+  JOIN InvoiceLine ON Track.TrackId = InvoiceLine.TrackId 
+GROUP BY 
+  1 
+ORDER BY 
+  2 DESC 
+LIMIT 
+  5;
